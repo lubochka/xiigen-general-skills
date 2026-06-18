@@ -1,0 +1,29 @@
+# Generated Code Review
+
+## Purpose
+Review generated code before trusting it.
+
+## When to Use
+Use after AI-generated code, scaffolding, migration output, or copied snippets.
+
+## Inputs
+Generated files, expected behavior, APIs, tests, security constraints.
+
+## Steps
+1. Inspect logic and API compatibility.
+2. Check error handling and security-sensitive paths.
+3. Run relevant verification.
+4. Remove unused or hallucinated code.
+
+## Gates
+Generated output is reviewed as code, not accepted as source of truth.
+
+## Evidence
+Review findings, tests, build checks, or manual inspection notes.
+
+## Anti-Patterns
+Assuming generated code is correct because it is syntactically plausible.
+
+## Related
+`review-fix-loop`, `code-examination`
+

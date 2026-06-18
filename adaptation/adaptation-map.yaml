@@ -1,0 +1,331 @@
+schema_version: 1
+map_id: xiigen-general-skills-adaptation
+canonical_version: 0.1.0-oss-rc1
+project_profile_ref: project-profile.yaml
+
+tool_targets:
+  cursor:
+    rule_dir: .cursor/rules
+    instruction_file: AGENTS.md
+  claude:
+    instruction_file: CLAUDE.md
+    skills_dir: .claude/skills
+  codex:
+    instruction_file: AGENTS.md
+    skills_dir: .agents/skills
+
+required_entry_fields:
+  - id
+  - layer
+  - artifact_type
+  - source_family
+  - portability
+  - purpose
+  - applies_when
+  - parameters_required
+  - workflow_stage
+  - render
+  - activation
+  - dependencies
+  - conflicts
+  - quality_gates
+  - status
+  - notes
+
+common_quality_gates:
+  - map_schema_valid
+  - no_unresolved_placeholders
+  - no_private_paths
+  - no_secrets
+  - skipped_entries_explained
+  - adapter_semantic_drift_check
+
+activation_mode_schema:
+  always:
+    cursor: "Render as `.mdc` rule with always-apply behavior or repository `AGENTS.md` startup section."
+    claude: "Render into `CLAUDE.md` or always-loaded project guidance."
+    codex: "Render into `AGENTS.md` startup guidance."
+  explicit_skill:
+    cursor: "Render as `.mdc` rule with description; user/agent invokes when task matches."
+    claude: "Render as `.claude/skills/<skill-name>/SKILL.md`."
+    codex: "Render as `.agents/skills/<skill-name>/SKILL.md`."
+  path_scoped:
+    cursor: "Render as `.mdc` rule with globs."
+    claude: "Render as skill plus path note in `CLAUDE.md`."
+    codex: "Render as skill plus path note in `AGENTS.md`."
+  manual:
+    cursor: "Render as documentation or manual rule reference."
+    claude: "Render as manual guide or explicit skill."
+    codex: "Render as manual guide or explicit skill."
+
+quality_gate_definitions:
+  map_schema_valid:
+    severity: blocker
+    pass: required map sections and executable entries are present
+    evidence: scripts/validate-map.ps1 output
+  no_unresolved_placeholders:
+    severity: blocker
+    pass: ready entries and rendered outputs have no unresolved placeholders
+    evidence: adaptation report placeholder scan
+  no_private_paths:
+    severity: blocker
+    pass: outputs contain no local absolute source paths
+    evidence: private path scan
+  no_secrets:
+    severity: blocker
+    pass: outputs contain no tokens, credentials, private prompts, or raw logs
+    evidence: secret scan
+  skipped_entries_explained:
+    severity: required
+    pass: every skipped entry has a reason in ADAPTATION_REPORT.md
+    evidence: skipped section in adaptation report
+  adapter_semantic_drift_check:
+    severity: blocker
+    pass: Cursor, Claude, and Codex outputs preserve the same purpose, gates, anti-patterns, and evidence requirements
+    evidence: adapter output-layout review
+  commands_from_target_project_only:
+    severity: blocker
+    pass: stack commands come from project-profile.yaml, CI, or target repo docs
+    evidence: checked target files and command list
+  commands_must_be_profile_parameters:
+    severity: blocker
+    pass: command placeholders are supplied by the target project profile, not hard-coded
+    evidence: project-profile.yaml command section
+  no_stack_commands_in_universal:
+    severity: blocker
+    pass: universal skills contain no concrete stack commands
+    evidence: universal skill scan
+  evidence_is_not_approval:
+    severity: blocker
+    pass: evidence supports claims but does not self-approve completion
+    evidence: review record
+  no_xiigen_only_terms_as_requirements:
+    severity: blocker
+    pass: source-project names appear only as examples or forbidden requirements
+    evidence: architecture template scan
+  no_raw_training_artifacts:
+    severity: blocker
+    pass: training data, models, checkpoints, and experiment results are not published raw
+    evidence: release gate scan
+  no_private_settings_published:
+    severity: blocker
+    pass: local agent settings and permission files are used only as source material
+    evidence: source coverage and output scan
+  private_paths_removed:
+    severity: blocker
+    pass: local absolute source paths are removed or replaced with placeholders
+    evidence: private path scan
+  raw_generated_material_not_published:
+    severity: blocker
+    pass: generated docs and evidence bundles are not published raw
+    evidence: release gate scan
+
+artifact_catalog:
+  universal:
+    - { id: universal.authority-chain, path: skills/universal/authority-chain/SKILL.md }
+    - { id: universal.project-rules-first, path: skills/universal/project-rules-first/SKILL.md }
+    - { id: universal.plan-before-execution, path: skills/universal/plan-before-execution/SKILL.md }
+    - { id: universal.evidence-before-final, path: skills/universal/evidence-before-final/SKILL.md }
+    - { id: universal.executor-cannot-self-finish, path: skills/universal/executor-cannot-self-finish/SKILL.md }
+    - { id: universal.review-fix-loop, path: skills/universal/review-fix-loop/SKILL.md }
+    - { id: universal.scope-and-blockers, path: skills/universal/scope-and-blockers/SKILL.md }
+    - { id: universal.stale-baseline-guard, path: skills/universal/stale-baseline-guard/SKILL.md }
+    - { id: universal.claim-verification, path: skills/universal/claim-verification/SKILL.md }
+    - { id: universal.no-secrets, path: skills/universal/no-secrets/SKILL.md }
+    - { id: universal.test-integrity, path: skills/universal/test-integrity/SKILL.md }
+    - { id: universal.failure-triage, path: skills/universal/failure-triage/SKILL.md }
+    - { id: universal.root-cause-tracing, path: skills/universal/root-cause-tracing/SKILL.md }
+    - { id: universal.systematic-debugging, path: skills/universal/systematic-debugging/SKILL.md }
+    - { id: universal.debug-session, path: skills/universal/debug-session/SKILL.md }
+    - { id: universal.code-request-safety, path: skills/universal/code-request-safety/SKILL.md }
+    - { id: universal.code-examination, path: skills/universal/code-examination/SKILL.md }
+    - { id: universal.code-execution, path: skills/universal/code-execution/SKILL.md }
+    - { id: universal.generated-code-review, path: skills/universal/generated-code-review/SKILL.md }
+    - { id: universal.documentation-sync, path: skills/universal/documentation-sync/SKILL.md }
+    - { id: universal.document-hierarchy, path: skills/universal/document-hierarchy/SKILL.md }
+    - { id: universal.integration-testing, path: skills/universal/integration-testing/SKILL.md }
+    - { id: universal.e2e-test-matrix, path: skills/universal/e2e-test-matrix/SKILL.md }
+    - { id: universal.user-journey-testing, path: skills/universal/user-journey-testing/SKILL.md }
+    - { id: universal.assumption-registry, path: skills/universal/assumption-registry/SKILL.md }
+    - { id: universal.decision-capture, path: skills/universal/decision-capture/SKILL.md }
+    - { id: universal.goal-delivery-completeness, path: skills/universal/goal-delivery-completeness/SKILL.md }
+    - { id: universal.session-output-contract, path: skills/universal/session-output-contract/SKILL.md }
+    - { id: universal.output-readability-gate, path: skills/universal/output-readability-gate/SKILL.md }
+  architecture:
+    - { id: architecture.trainable-architecture, path: guides/architecture/trainable-architecture-template.md }
+    - { id: architecture.logical-unit-flow-machine, path: guides/architecture/logical-unit-flow-machine-template.md }
+    - { id: architecture.checkpoint-model-lifecycle, path: guides/architecture/checkpoint-model-lifecycle-template.md }
+    - { id: architecture.project-wiki, path: guides/architecture/project-wiki-template.md }
+    - { id: architecture.smart-skills-orchestration, path: guides/architecture/smart-skills-orchestration-template.md }
+    - { id: architecture.enterprise-completion-matrix, path: guides/architecture/enterprise-completion-matrix-template.md }
+    - { id: architecture.tenant-launch-governance, path: guides/architecture/tenant-launch-governance-template.md }
+    - { id: architecture.plugin-runtime-evidence, path: guides/architecture/plugin-runtime-evidence-template.md }
+    - { id: architecture.session-gated-delivery, path: guides/architecture/session-gated-delivery-template.md }
+  stack:
+    - { id: stack.dotnet-csharp, path: guides/stack-skill-factories/create-dotnet-csharp-skill.md }
+    - { id: stack.aws-runtime-evidence, path: guides/stack-skill-factories/create-aws-runtime-evidence-skill.md }
+    - { id: stack.docker-export-import, path: guides/stack-skill-factories/create-docker-export-import-skill.md }
+    - { id: stack.angular-ui-evidence, path: guides/stack-skill-factories/create-angular-ui-evidence-skill.md }
+    - { id: stack.trainable-runtime, path: guides/stack-skill-factories/create-trainable-runtime-skill.md }
+    - { id: stack.command-gate, path: guides/stack-skill-factories/create-command-gate-skill.md }
+    - { id: stack.generic-stack-skill, path: guides/stack-skill-factories/create-generic-stack-skill.md }
+  other:
+    - { id: other.generated-docs-policy, path: guides/other-policies/generated-docs-policy.md }
+    - { id: other.evidence-artifact-policy, path: guides/other-policies/evidence-artifact-policy.md }
+    - { id: other.legal-content-policy, path: guides/other-policies/legal-content-policy.md }
+    - { id: other.archived-plan-policy, path: guides/other-policies/archived-plan-policy.md }
+    - { id: other.source-material-classification, path: guides/other-policies/source-material-classification.md }
+
+entries:
+  - id: universal.evidence-before-final
+    layer: universal
+    artifact_type: skill
+    source_family: [self-verification, claim-verification]
+    portability: extract
+    purpose: Require evidence before completion claims.
+    applies_when: Any task where an agent reports completion.
+    parameters_required: [accepted_evidence_types, verification_commands_from_target_profile]
+    workflow_stage: [select, parameterize, render, validate]
+    render:
+      required:
+        neutral: skills/universal/evidence-before-final/SKILL.md
+      optional:
+        cursor: .cursor/rules/01-evidence-before-final.mdc
+        claude: .claude/skills/evidence-before-final/SKILL.md
+        codex: .agents/skills/evidence-before-final/SKILL.md
+    activation: { cursor: always, claude: explicit_skill, codex: explicit_skill }
+    dependencies: [universal.executor-cannot-self-finish]
+    conflicts: []
+    quality_gates: [map_schema_valid, evidence_is_not_approval, commands_must_be_profile_parameters]
+    status: ready
+    notes: Stack/runtime evidence belongs in stack entries.
+
+  - id: architecture.trainable-architecture
+    layer: architecture
+    artifact_type: template
+    source_family: [architecture-concepts, trainable-decision-skills]
+    portability: parameterize
+    purpose: Adapt trainable architecture concepts without copying private implementation.
+    applies_when: Target project has trainable units, feedback loops, model artifacts, or adaptive prompts.
+    parameters_required: [domain, trainable_unit_type, feedback_source, lifecycle_states, promotion_gates]
+    workflow_stage: [select, parameterize, render, validate]
+    render:
+      required:
+        neutral: guides/architecture/trainable-architecture-template.md
+      optional: {}
+    activation: { cursor: manual, claude: explicit_skill, codex: explicit_skill }
+    dependencies: [universal.assumption-registry, universal.decision-capture]
+    conflicts: []
+    quality_gates: [no_xiigen_only_terms_as_requirements, no_raw_training_artifacts]
+    status: ready
+    notes: Template asks questions; it does not prescribe ML stack.
+
+  - id: stack.dotnet-csharp
+    layer: stack
+    artifact_type: guide
+    source_family: [dotnet-plans, build-config, test-rules]
+    portability: parameterize
+    purpose: Create a target-project .NET/C# skill without copying commands.
+    applies_when: Target project uses .NET, C#, solution files, or C# tests.
+    parameters_required: [dotnet_version, solution_files, project_layout, build_commands, test_commands, namespace_rules, forbidden_commands]
+    workflow_stage: [select, parameterize, render, validate]
+    render:
+      required:
+        neutral: guides/stack-skill-factories/create-dotnet-csharp-skill.md
+      optional: {}
+    activation: { cursor: manual, claude: explicit_skill, codex: explicit_skill }
+    dependencies: [universal.code-request-safety, universal.code-execution, universal.failure-triage]
+    conflicts: []
+    quality_gates: [commands_from_target_project_only, no_stack_commands_in_universal]
+    status: ready
+    notes: Commands come from target project profile or CI only.
+
+  - id: stack.command-gate
+    layer: stack
+    artifact_type: guide
+    source_family: [local-agent-settings, command-scripts, command-tools]
+    portability: parameterize
+    purpose: Create a target-project command safety gate.
+    applies_when: Target project needs safe/approval-required/forbidden command categories.
+    parameters_required: [safe_commands, approval_required_commands, forbidden_commands, destructive_patterns, local_policy_source]
+    workflow_stage: [select, parameterize, render, validate]
+    render:
+      required:
+        neutral: guides/stack-skill-factories/create-command-gate-skill.md
+      optional: {}
+    activation: { cursor: manual, claude: explicit_skill, codex: explicit_skill }
+    dependencies: [universal.code-request-safety, universal.code-execution]
+    conflicts: []
+    quality_gates: [commands_from_target_project_only, no_private_settings_published]
+    status: ready
+    notes: Local settings files are source material only.
+
+  - id: other.generated-docs-policy
+    layer: other
+    artifact_type: policy
+    source_family: [generated-wiki-domain, generated-output-artifacts]
+    portability: reference_only
+    purpose: Classify generated docs and raw artifacts as source material.
+    applies_when: Source includes generated docs, reports, evidence, or artifacts.
+    parameters_required: [generated_paths, canonical_docs, sanitizer_policy]
+    workflow_stage: [select, parameterize, render, validate]
+    render:
+      required:
+        neutral: guides/other-policies/generated-docs-policy.md
+      optional: {}
+    activation: { cursor: manual, claude: manual, codex: manual }
+    dependencies: [universal.no-secrets]
+    conflicts: []
+    quality_gates: [raw_generated_material_not_published, private_paths_removed]
+    status: ready
+    notes: Generated material is not reusable guidance by default.
+
+  # Compact executable entries for the remaining catalog artifacts.
+  - { id: universal.authority-chain, layer: universal, artifact_type: skill, source_family: [root-agent-guidance], portability: extract, purpose: "Resolve instruction authority conflicts.", applies_when: "Any task startup or conflict.", parameters_required: [project_rule_files], workflow_stage: [select, parameterize, render, validate], render: { required: { neutral: skills/universal/authority-chain/SKILL.md }, optional: { cursor: .cursor/rules/00-authority-chain.mdc, claude: .claude/skills/authority-chain/SKILL.md, codex: .agents/skills/authority-chain/SKILL.md } }, activation: { cursor: always, claude: always, codex: always }, dependencies: [], conflicts: [], quality_gates: [map_schema_valid, no_unresolved_placeholders], status: ready, notes: "Startup governance skill." }
+  - { id: universal.project-rules-first, layer: universal, artifact_type: skill, source_family: [skill-loading-guidance], portability: extract, purpose: "Read target project rules before acting.", applies_when: "Task startup.", parameters_required: [project_rule_files], workflow_stage: [select, parameterize, render, validate], render: { required: { neutral: skills/universal/project-rules-first/SKILL.md }, optional: { cursor: .cursor/rules/00-project-rules-first.mdc, claude: .claude/skills/project-rules-first/SKILL.md, codex: .agents/skills/project-rules-first/SKILL.md } }, activation: { cursor: always, claude: always, codex: always }, dependencies: [universal.authority-chain], conflicts: [], quality_gates: [map_schema_valid], status: ready, notes: "Target rules beat generic habits." }
+  - { id: universal.plan-before-execution, layer: universal, artifact_type: skill, source_family: [planning-startup], portability: extract, purpose: "Create bounded plan before non-trivial work.", applies_when: "Complex or risky tasks.", parameters_required: [goal, constraints], workflow_stage: [select, parameterize, render, validate], render: { required: { neutral: skills/universal/plan-before-execution/SKILL.md }, optional: { cursor: .cursor/rules/plan-before-execution.mdc, claude: .claude/skills/plan-before-execution/SKILL.md, codex: .agents/skills/plan-before-execution/SKILL.md } }, activation: { cursor: explicit_skill, claude: explicit_skill, codex: explicit_skill }, dependencies: [universal.scope-and-blockers], conflicts: [], quality_gates: [map_schema_valid], status: ready, notes: "Planning is not approval." }
+  - { id: universal.executor-cannot-self-finish, layer: universal, artifact_type: skill, source_family: [plan-review], portability: extract, purpose: "Prevent executor self-approval.", applies_when: "Review or completion gate.", parameters_required: [review_gate], workflow_stage: [select, parameterize, render, validate], render: { required: { neutral: skills/universal/executor-cannot-self-finish/SKILL.md }, optional: { cursor: .cursor/rules/executor-cannot-self-finish.mdc, claude: .claude/skills/executor-cannot-self-finish/SKILL.md, codex: .agents/skills/executor-cannot-self-finish/SKILL.md } }, activation: { cursor: always, claude: explicit_skill, codex: explicit_skill }, dependencies: [universal.evidence-before-final], conflicts: [], quality_gates: [evidence_is_not_approval], status: ready, notes: "Evidence does not approve itself." }
+  - { id: universal.review-fix-loop, layer: universal, artifact_type: skill, source_family: [plan-review], portability: extract, purpose: "Close review findings through fix and re-review.", applies_when: "Any actionable review.", parameters_required: [review_findings], workflow_stage: [select, parameterize, render, validate], render: { required: { neutral: skills/universal/review-fix-loop/SKILL.md }, optional: { cursor: .cursor/rules/review-fix-loop.mdc, claude: .claude/skills/review-fix-loop/SKILL.md, codex: .agents/skills/review-fix-loop/SKILL.md } }, activation: { cursor: explicit_skill, claude: explicit_skill, codex: explicit_skill }, dependencies: [universal.claim-verification], conflicts: [], quality_gates: [skipped_entries_explained], status: ready, notes: "Fixes must be rechecked." }
+  - { id: universal.scope-and-blockers, layer: universal, artifact_type: skill, source_family: [planning-startup], portability: extract, purpose: "Track scope and blockers.", applies_when: "Broad or ambiguous tasks.", parameters_required: [goal, constraints], workflow_stage: [select, parameterize, render, validate], render: { required: { neutral: skills/universal/scope-and-blockers/SKILL.md }, optional: { cursor: .cursor/rules/scope-and-blockers.mdc, claude: .claude/skills/scope-and-blockers/SKILL.md, codex: .agents/skills/scope-and-blockers/SKILL.md } }, activation: { cursor: always, claude: explicit_skill, codex: explicit_skill }, dependencies: [], conflicts: [], quality_gates: [skipped_entries_explained], status: ready, notes: "No silent scope expansion." }
+  - { id: universal.stale-baseline-guard, layer: universal, artifact_type: skill, source_family: [session-startup], portability: extract, purpose: "Avoid stale context.", applies_when: "After interruption or concurrent changes.", parameters_required: [current_state], workflow_stage: [select, parameterize, render, validate], render: { required: { neutral: skills/universal/stale-baseline-guard/SKILL.md }, optional: { cursor: .cursor/rules/stale-baseline-guard.mdc, claude: .claude/skills/stale-baseline-guard/SKILL.md, codex: .agents/skills/stale-baseline-guard/SKILL.md } }, activation: { cursor: always, claude: always, codex: always }, dependencies: [universal.project-rules-first], conflicts: [], quality_gates: [map_schema_valid], status: ready, notes: "Refresh before acting." }
+  - { id: universal.claim-verification, layer: universal, artifact_type: skill, source_family: [self-verification], portability: extract, purpose: "Verify claims before final output.", applies_when: "Reports and final answers.", parameters_required: [evidence_sources], workflow_stage: [select, parameterize, render, validate], render: { required: { neutral: skills/universal/claim-verification/SKILL.md }, optional: { cursor: .cursor/rules/claim-verification.mdc, claude: .claude/skills/claim-verification/SKILL.md, codex: .agents/skills/claim-verification/SKILL.md } }, activation: { cursor: always, claude: explicit_skill, codex: explicit_skill }, dependencies: [universal.evidence-before-final], conflicts: [], quality_gates: [evidence_is_not_approval], status: ready, notes: "Mark assumptions clearly." }
+  - { id: universal.no-secrets, layer: universal, artifact_type: skill, source_family: [dev-safety], portability: extract, purpose: "Prevent sensitive material publication.", applies_when: "Before commit, report, example, or release.", parameters_required: [secret_scan_patterns], workflow_stage: [select, parameterize, render, validate], render: { required: { neutral: skills/universal/no-secrets/SKILL.md }, optional: { cursor: .cursor/rules/no-secrets.mdc, claude: .claude/skills/no-secrets/SKILL.md, codex: .agents/skills/no-secrets/SKILL.md } }, activation: { cursor: always, claude: always, codex: always }, dependencies: [], conflicts: [], quality_gates: [no_secrets, no_private_paths], status: ready, notes: "Blocks raw evidence and private paths." }
+  - { id: universal.test-integrity, layer: universal, artifact_type: skill, source_family: [testing-discipline], portability: extract, purpose: "Keep tests meaningful.", applies_when: "Writing or changing tests.", parameters_required: [target_test_commands], workflow_stage: [select, parameterize, render, validate], render: { required: { neutral: skills/universal/test-integrity/SKILL.md }, optional: { cursor: .cursor/rules/test-integrity.mdc, claude: .claude/skills/test-integrity/SKILL.md, codex: .agents/skills/test-integrity/SKILL.md } }, activation: { cursor: explicit_skill, claude: explicit_skill, codex: explicit_skill }, dependencies: [universal.code-execution], conflicts: [], quality_gates: [commands_from_target_project_only], status: ready, notes: "Do not weaken failing tests for green output." }
+  - { id: universal.failure-triage, layer: universal, artifact_type: skill, source_family: [diagnostics], portability: extract, purpose: "Classify failures before fixes.", applies_when: "Failed checks or smoke tests.", parameters_required: [failure_output], workflow_stage: [select, parameterize, render, validate], render: { required: { neutral: skills/universal/failure-triage/SKILL.md }, optional: { cursor: .cursor/rules/failure-triage.mdc, claude: .claude/skills/failure-triage/SKILL.md, codex: .agents/skills/failure-triage/SKILL.md } }, activation: { cursor: explicit_skill, claude: explicit_skill, codex: explicit_skill }, dependencies: [], conflicts: [], quality_gates: [map_schema_valid], status: ready, notes: "No blind fixes." }
+  - { id: universal.root-cause-tracing, layer: universal, artifact_type: skill, source_family: [diagnostics], portability: extract, purpose: "Trace symptom to root cause.", applies_when: "Repeated or indirect failures.", parameters_required: [repro_steps], workflow_stage: [select, parameterize, render, validate], render: { required: { neutral: skills/universal/root-cause-tracing/SKILL.md }, optional: { cursor: .cursor/rules/root-cause-tracing.mdc, claude: .claude/skills/root-cause-tracing/SKILL.md, codex: .agents/skills/root-cause-tracing/SKILL.md } }, activation: { cursor: explicit_skill, claude: explicit_skill, codex: explicit_skill }, dependencies: [universal.failure-triage], conflicts: [], quality_gates: [map_schema_valid], status: ready, notes: "Cause must explain symptom." }
+  - { id: universal.systematic-debugging, layer: universal, artifact_type: skill, source_family: [diagnostics], portability: extract, purpose: "Debug by hypotheses.", applies_when: "Unclear failures.", parameters_required: [hypotheses], workflow_stage: [select, parameterize, render, validate], render: { required: { neutral: skills/universal/systematic-debugging/SKILL.md }, optional: { cursor: .cursor/rules/systematic-debugging.mdc, claude: .claude/skills/systematic-debugging/SKILL.md, codex: .agents/skills/systematic-debugging/SKILL.md } }, activation: { cursor: explicit_skill, claude: explicit_skill, codex: explicit_skill }, dependencies: [universal.failure-triage], conflicts: [], quality_gates: [map_schema_valid], status: ready, notes: "One hypothesis at a time." }
+  - { id: universal.debug-session, layer: universal, artifact_type: skill, source_family: [diagnostics], portability: extract, purpose: "Make debugging resumable.", applies_when: "Long debug sessions.", parameters_required: [debug_goal], workflow_stage: [select, parameterize, render, validate], render: { required: { neutral: skills/universal/debug-session/SKILL.md }, optional: { cursor: .cursor/rules/debug-session.mdc, claude: .claude/skills/debug-session/SKILL.md, codex: .agents/skills/debug-session/SKILL.md } }, activation: { cursor: explicit_skill, claude: explicit_skill, codex: explicit_skill }, dependencies: [universal.systematic-debugging], conflicts: [], quality_gates: [skipped_entries_explained], status: ready, notes: "Useful for handoff." }
+  - { id: universal.code-request-safety, layer: universal, artifact_type: skill, source_family: [dev-safety], portability: extract, purpose: "Check code action risk.", applies_when: "Before edits or commands.", parameters_required: [operation_scope], workflow_stage: [select, parameterize, render, validate], render: { required: { neutral: skills/universal/code-request-safety/SKILL.md }, optional: { cursor: .cursor/rules/code-request-safety.mdc, claude: .claude/skills/code-request-safety/SKILL.md, codex: .agents/skills/code-request-safety/SKILL.md } }, activation: { cursor: always, claude: always, codex: always }, dependencies: [universal.no-secrets], conflicts: [], quality_gates: [no_private_paths], status: ready, notes: "Gate destructive work." }
+  - { id: universal.code-examination, layer: universal, artifact_type: skill, source_family: [dev-safety], portability: extract, purpose: "Read code before changing it.", applies_when: "Before implementation.", parameters_required: [entry_points], workflow_stage: [select, parameterize, render, validate], render: { required: { neutral: skills/universal/code-examination/SKILL.md }, optional: { cursor: .cursor/rules/code-examination.mdc, claude: .claude/skills/code-examination/SKILL.md, codex: .agents/skills/code-examination/SKILL.md } }, activation: { cursor: explicit_skill, claude: explicit_skill, codex: explicit_skill }, dependencies: [universal.project-rules-first], conflicts: [], quality_gates: [map_schema_valid], status: ready, notes: "Follow local patterns." }
+  - { id: universal.code-execution, layer: universal, artifact_type: skill, source_family: [dev-safety], portability: extract, purpose: "Run commands safely.", applies_when: "Before command execution.", parameters_required: [target_project_commands], workflow_stage: [select, parameterize, render, validate], render: { required: { neutral: skills/universal/code-execution/SKILL.md }, optional: { cursor: .cursor/rules/code-execution.mdc, claude: .claude/skills/code-execution/SKILL.md, codex: .agents/skills/code-execution/SKILL.md } }, activation: { cursor: always, claude: always, codex: always }, dependencies: [universal.code-request-safety], conflicts: [], quality_gates: [commands_from_target_project_only], status: ready, notes: "No copied commands." }
+  - { id: universal.generated-code-review, layer: universal, artifact_type: skill, source_family: [review], portability: extract, purpose: "Review generated code.", applies_when: "After scaffolding or generated code.", parameters_required: [generated_files], workflow_stage: [select, parameterize, render, validate], render: { required: { neutral: skills/universal/generated-code-review/SKILL.md }, optional: { cursor: .cursor/rules/generated-code-review.mdc, claude: .claude/skills/generated-code-review/SKILL.md, codex: .agents/skills/generated-code-review/SKILL.md } }, activation: { cursor: explicit_skill, claude: explicit_skill, codex: explicit_skill }, dependencies: [universal.code-examination], conflicts: [], quality_gates: [map_schema_valid], status: ready, notes: "Generated code is not source of truth." }
+  - { id: universal.documentation-sync, layer: universal, artifact_type: skill, source_family: [documentation], portability: extract, purpose: "Keep docs aligned.", applies_when: "Docs or behavior changes.", parameters_required: [changed_files], workflow_stage: [select, parameterize, render, validate], render: { required: { neutral: skills/universal/documentation-sync/SKILL.md }, optional: { cursor: .cursor/rules/documentation-sync.mdc, claude: .claude/skills/documentation-sync/SKILL.md, codex: .agents/skills/documentation-sync/SKILL.md } }, activation: { cursor: explicit_skill, claude: explicit_skill, codex: explicit_skill }, dependencies: [universal.document-hierarchy], conflicts: [], quality_gates: [map_schema_valid], status: ready, notes: "Docs must match behavior." }
+  - { id: universal.document-hierarchy, layer: universal, artifact_type: skill, source_family: [documentation], portability: extract, purpose: "Avoid competing sources of truth.", applies_when: "Adding or adapting docs.", parameters_required: [doc_sources], workflow_stage: [select, parameterize, render, validate], render: { required: { neutral: skills/universal/document-hierarchy/SKILL.md }, optional: { cursor: .cursor/rules/document-hierarchy.mdc, claude: .claude/skills/document-hierarchy/SKILL.md, codex: .agents/skills/document-hierarchy/SKILL.md } }, activation: { cursor: always, claude: explicit_skill, codex: explicit_skill }, dependencies: [universal.authority-chain], conflicts: [], quality_gates: [map_schema_valid], status: ready, notes: "Canonical docs first." }
+  - { id: universal.integration-testing, layer: universal, artifact_type: skill, source_family: [testing], portability: extract, purpose: "Verify component boundaries.", applies_when: "Cross-component behavior.", parameters_required: [integration_boundary], workflow_stage: [select, parameterize, render, validate], render: { required: { neutral: skills/universal/integration-testing/SKILL.md }, optional: { cursor: .cursor/rules/integration-testing.mdc, claude: .claude/skills/integration-testing/SKILL.md, codex: .agents/skills/integration-testing/SKILL.md } }, activation: { cursor: explicit_skill, claude: explicit_skill, codex: explicit_skill }, dependencies: [universal.test-integrity], conflicts: [], quality_gates: [commands_from_target_project_only], status: ready, notes: "Boundary behavior over isolated checks." }
+  - { id: universal.e2e-test-matrix, layer: universal, artifact_type: skill, source_family: [testing], portability: extract, purpose: "Design E2E matrix.", applies_when: "Release readiness or journeys.", parameters_required: [journeys, roles, environments], workflow_stage: [select, parameterize, render, validate], render: { required: { neutral: skills/universal/e2e-test-matrix/SKILL.md }, optional: { cursor: .cursor/rules/e2e-test-matrix.mdc, claude: .claude/skills/e2e-test-matrix/SKILL.md, codex: .agents/skills/e2e-test-matrix/SKILL.md } }, activation: { cursor: explicit_skill, claude: explicit_skill, codex: explicit_skill }, dependencies: [universal.user-journey-testing], conflicts: [], quality_gates: [skipped_entries_explained], status: ready, notes: "More than one happy path." }
+  - { id: universal.user-journey-testing, layer: universal, artifact_type: skill, source_family: [testing], portability: extract, purpose: "Validate realistic user workflow.", applies_when: "User-facing or tool workflows.", parameters_required: [user_goal], workflow_stage: [select, parameterize, render, validate], render: { required: { neutral: skills/universal/user-journey-testing/SKILL.md }, optional: { cursor: .cursor/rules/user-journey-testing.mdc, claude: .claude/skills/user-journey-testing/SKILL.md, codex: .agents/skills/user-journey-testing/SKILL.md } }, activation: { cursor: explicit_skill, claude: explicit_skill, codex: explicit_skill }, dependencies: [universal.evidence-before-final], conflicts: [], quality_gates: [skipped_entries_explained], status: ready, notes: "Test the user's goal." }
+  - { id: universal.assumption-registry, layer: universal, artifact_type: skill, source_family: [governance], portability: extract, purpose: "Record assumptions.", applies_when: "Unclear requirements or architecture.", parameters_required: [assumptions], workflow_stage: [select, parameterize, render, validate], render: { required: { neutral: skills/universal/assumption-registry/SKILL.md }, optional: { cursor: .cursor/rules/assumption-registry.mdc, claude: .claude/skills/assumption-registry/SKILL.md, codex: .agents/skills/assumption-registry/SKILL.md } }, activation: { cursor: explicit_skill, claude: explicit_skill, codex: explicit_skill }, dependencies: [universal.scope-and-blockers], conflicts: [], quality_gates: [skipped_entries_explained], status: ready, notes: "Critical assumptions need gates." }
+  - { id: universal.decision-capture, layer: universal, artifact_type: skill, source_family: [governance], portability: extract, purpose: "Record decisions and rationale.", applies_when: "Architecture or policy choices.", parameters_required: [decision_context], workflow_stage: [select, parameterize, render, validate], render: { required: { neutral: skills/universal/decision-capture/SKILL.md }, optional: { cursor: .cursor/rules/decision-capture.mdc, claude: .claude/skills/decision-capture/SKILL.md, codex: .agents/skills/decision-capture/SKILL.md } }, activation: { cursor: explicit_skill, claude: explicit_skill, codex: explicit_skill }, dependencies: [universal.assumption-registry], conflicts: [], quality_gates: [map_schema_valid], status: ready, notes: "Make rationale durable." }
+  - { id: universal.goal-delivery-completeness, layer: universal, artifact_type: skill, source_family: [session-output], portability: extract, purpose: "Check delivered work against goal.", applies_when: "Before final output.", parameters_required: [requirements], workflow_stage: [select, parameterize, render, validate], render: { required: { neutral: skills/universal/goal-delivery-completeness/SKILL.md }, optional: { cursor: .cursor/rules/goal-delivery-completeness.mdc, claude: .claude/skills/goal-delivery-completeness/SKILL.md, codex: .agents/skills/goal-delivery-completeness/SKILL.md } }, activation: { cursor: always, claude: explicit_skill, codex: explicit_skill }, dependencies: [universal.evidence-before-final], conflicts: [], quality_gates: [skipped_entries_explained], status: ready, notes: "No partial closure." }
+  - { id: universal.session-output-contract, layer: universal, artifact_type: skill, source_family: [session-output], portability: extract, purpose: "Produce resumable final output.", applies_when: "Final response or handoff.", parameters_required: [changed_files, checks], workflow_stage: [select, parameterize, render, validate], render: { required: { neutral: skills/universal/session-output-contract/SKILL.md }, optional: { cursor: .cursor/rules/session-output-contract.mdc, claude: .claude/skills/session-output-contract/SKILL.md, codex: .agents/skills/session-output-contract/SKILL.md } }, activation: { cursor: always, claude: explicit_skill, codex: explicit_skill }, dependencies: [universal.goal-delivery-completeness], conflicts: [], quality_gates: [skipped_entries_explained], status: ready, notes: "Changed, checked, blocked, next." }
+  - { id: universal.output-readability-gate, layer: universal, artifact_type: skill, source_family: [session-output], portability: extract, purpose: "Keep outputs readable.", applies_when: "Before finalizing artifacts.", parameters_required: [target_audience], workflow_stage: [select, parameterize, render, validate], render: { required: { neutral: skills/universal/output-readability-gate/SKILL.md }, optional: { cursor: .cursor/rules/output-readability-gate.mdc, claude: .claude/skills/output-readability-gate/SKILL.md, codex: .agents/skills/output-readability-gate/SKILL.md } }, activation: { cursor: always, claude: explicit_skill, codex: explicit_skill }, dependencies: [universal.session-output-contract], conflicts: [], quality_gates: [map_schema_valid], status: ready, notes: "No noisy dumps." }
+
+  - { id: architecture.logical-unit-flow-machine, layer: architecture, artifact_type: template, source_family: [orchestration-architecture], portability: parameterize, purpose: "Adapt flow/orchestration architecture.", applies_when: "Target project has workflows, DAGs, or pipelines.", parameters_required: [workflow_types, node_model, failure_policy], workflow_stage: [select, parameterize, render, validate], render: { required: { neutral: guides/architecture/logical-unit-flow-machine-template.md }, optional: {} }, activation: { cursor: manual, claude: explicit_skill, codex: explicit_skill }, dependencies: [universal.decision-capture], conflicts: [], quality_gates: [no_xiigen_only_terms_as_requirements], status: ready, notes: "No hardcoded orchestrator." }
+  - { id: architecture.checkpoint-model-lifecycle, layer: architecture, artifact_type: template, source_family: [checkpoint-lifecycle], portability: parameterize, purpose: "Adapt checkpoint/version lifecycle.", applies_when: "Target project has versioned artifacts or rollback.", parameters_required: [artifact_types, promotion_gates, rollback_policy], workflow_stage: [select, parameterize, render, validate], render: { required: { neutral: guides/architecture/checkpoint-model-lifecycle-template.md }, optional: {} }, activation: { cursor: manual, claude: explicit_skill, codex: explicit_skill }, dependencies: [universal.evidence-before-final], conflicts: [], quality_gates: [raw_generated_material_not_published], status: ready, notes: "Raw checkpoints excluded." }
+  - { id: architecture.project-wiki, layer: architecture, artifact_type: template, source_family: [project-wiki-domain], portability: parameterize, purpose: "Adapt wiki/knowledge graph structure.", applies_when: "Target project has generated docs or domain graph.", parameters_required: [canonical_docs, generated_paths, relation_types], workflow_stage: [select, parameterize, render, validate], render: { required: { neutral: guides/architecture/project-wiki-template.md }, optional: {} }, activation: { cursor: manual, claude: explicit_skill, codex: explicit_skill }, dependencies: [universal.document-hierarchy], conflicts: [], quality_gates: [raw_generated_material_not_published], status: ready, notes: "Generated docs are not authority by default." }
+  - { id: architecture.smart-skills-orchestration, layer: architecture, artifact_type: template, source_family: [smart-skills-orchestration], portability: parameterize, purpose: "Adapt skill selection and prompt validation.", applies_when: "Target project orchestrates skills or prompts.", parameters_required: [skill_catalog, activation_modes, validation_criteria], workflow_stage: [select, parameterize, render, validate], render: { required: { neutral: guides/architecture/smart-skills-orchestration-template.md }, optional: {} }, activation: { cursor: manual, claude: explicit_skill, codex: explicit_skill }, dependencies: [universal.decision-capture], conflicts: [], quality_gates: [no_secrets], status: ready, notes: "Private prompts excluded." }
+  - { id: architecture.enterprise-completion-matrix, layer: architecture, artifact_type: template, source_family: [enterprise-completion], portability: parameterize, purpose: "Adapt delivery completion governance.", applies_when: "Target project needs launch or readiness matrix.", parameters_required: [workstreams, acceptance_criteria, approvers], workflow_stage: [select, parameterize, render, validate], render: { required: { neutral: guides/architecture/enterprise-completion-matrix-template.md }, optional: {} }, activation: { cursor: manual, claude: explicit_skill, codex: explicit_skill }, dependencies: [universal.executor-cannot-self-finish], conflicts: [], quality_gates: [evidence_is_not_approval], status: ready, notes: "Evidence supports but does not approve." }
+  - { id: architecture.tenant-launch-governance, layer: architecture, artifact_type: template, source_family: [tenant-launch], portability: parameterize, purpose: "Adapt tenant/product launch governance.", applies_when: "Target project has tenant or launch unit.", parameters_required: [launch_unit, readiness_gates, rollback_policy], workflow_stage: [select, parameterize, render, validate], render: { required: { neutral: guides/architecture/tenant-launch-governance-template.md }, optional: {} }, activation: { cursor: manual, claude: explicit_skill, codex: explicit_skill }, dependencies: [universal.scope-and-blockers], conflicts: [], quality_gates: [no_xiigen_only_terms_as_requirements], status: ready, notes: "Master tenant only as example." }
+  - { id: architecture.plugin-runtime-evidence, layer: architecture, artifact_type: template, source_family: [plugin-runtime-evidence], portability: parameterize, purpose: "Adapt plugin lifecycle evidence.", applies_when: "Target project has plugins or extensions.", parameters_required: [plugin_model, lifecycle_states, smoke_tests], workflow_stage: [select, parameterize, render, validate], render: { required: { neutral: guides/architecture/plugin-runtime-evidence-template.md }, optional: {} }, activation: { cursor: manual, claude: explicit_skill, codex: explicit_skill }, dependencies: [universal.evidence-before-final], conflicts: [], quality_gates: [commands_from_target_project_only], status: ready, notes: "Stack commands stay in stack guides." }
+  - { id: architecture.session-gated-delivery, layer: architecture, artifact_type: template, source_family: [session-gated-delivery], portability: parameterize, purpose: "Adapt gated delivery sessions.", applies_when: "Target project uses staged sessions.", parameters_required: [session_goals, gates, review_owner], workflow_stage: [select, parameterize, render, validate], render: { required: { neutral: guides/architecture/session-gated-delivery-template.md }, optional: {} }, activation: { cursor: manual, claude: explicit_skill, codex: explicit_skill }, dependencies: [universal.session-output-contract], conflicts: [], quality_gates: [skipped_entries_explained], status: ready, notes: "Source sessions are not copied." }
+
+  - { id: stack.aws-runtime-evidence, layer: stack, artifact_type: guide, source_family: [aws-runtime-evidence], portability: parameterize, purpose: "Create AWS/runtime evidence skill.", applies_when: "Target project has AWS or cloud runtime evidence.", parameters_required: [cloud_provider, ci_system, deploy_commands, read_only_verification_commands], workflow_stage: [select, parameterize, render, validate], render: { required: { neutral: guides/stack-skill-factories/create-aws-runtime-evidence-skill.md }, optional: {} }, activation: { cursor: manual, claude: explicit_skill, codex: explicit_skill }, dependencies: [universal.code-request-safety, universal.evidence-before-final], conflicts: [], quality_gates: [commands_from_target_project_only, no_secrets], status: ready, notes: "No raw AWS configs." }
+  - { id: stack.docker-export-import, layer: stack, artifact_type: guide, source_family: [docker-export-import], portability: parameterize, purpose: "Create Docker/export/import skill.", applies_when: "Target project uses containers or export packages.", parameters_required: [compose_files, image_names, smoke_commands, artifact_policy], workflow_stage: [select, parameterize, render, validate], render: { required: { neutral: guides/stack-skill-factories/create-docker-export-import-skill.md }, optional: {} }, activation: { cursor: manual, claude: explicit_skill, codex: explicit_skill }, dependencies: [universal.code-execution, universal.no-secrets], conflicts: [], quality_gates: [commands_from_target_project_only, raw_generated_material_not_published], status: ready, notes: "Raw bundles excluded." }
+  - { id: stack.angular-ui-evidence, layer: stack, artifact_type: guide, source_family: [ui-visual-evidence], portability: parameterize, purpose: "Create UI evidence skill.", applies_when: "Target project has frontend visual evidence needs.", parameters_required: [ui_framework, app_start_commands, viewport_matrix], workflow_stage: [select, parameterize, render, validate], render: { required: { neutral: guides/stack-skill-factories/create-angular-ui-evidence-skill.md }, optional: {} }, activation: { cursor: manual, claude: explicit_skill, codex: explicit_skill }, dependencies: [universal.user-journey-testing, universal.evidence-before-final], conflicts: [], quality_gates: [commands_from_target_project_only, no_secrets], status: ready, notes: "Angular only if target uses it." }
+  - { id: stack.trainable-runtime, layer: stack, artifact_type: guide, source_family: [trainable-runtime], portability: parameterize, purpose: "Create trainable runtime implementation skill.", applies_when: "Target project implements ML/runtime primitives.", parameters_required: [runtime_language, training_commands, artifact_policy], workflow_stage: [select, parameterize, render, validate], render: { required: { neutral: guides/stack-skill-factories/create-trainable-runtime-skill.md }, optional: {} }, activation: { cursor: manual, claude: explicit_skill, codex: explicit_skill }, dependencies: [universal.code-execution, universal.no-secrets], conflicts: [], quality_gates: [commands_from_target_project_only, raw_generated_material_not_published], status: ready, notes: "No raw models or datasets." }
+  - { id: stack.generic-stack-skill, layer: stack, artifact_type: guide, source_family: [generic-stack], portability: parameterize, purpose: "Create guide for unsupported stacks.", applies_when: "No prepared stack guide fits.", parameters_required: [stack_name, discovery_files, commands, evidence_artifacts], workflow_stage: [select, parameterize, render, validate], render: { required: { neutral: guides/stack-skill-factories/create-generic-stack-skill.md }, optional: {} }, activation: { cursor: manual, claude: explicit_skill, codex: explicit_skill }, dependencies: [universal.code-request-safety, universal.evidence-before-final], conflicts: [], quality_gates: [commands_from_target_project_only, skipped_entries_explained], status: ready, notes: "Discovery first; no internet-memory stack rules." }
+
+  - { id: other.evidence-artifact-policy, layer: other, artifact_type: policy, source_family: [evidence-artifacts], portability: reference_only, purpose: "Handle logs, screenshots, reports, and runtime evidence.", applies_when: "Target adaptation uses evidence artifacts.", parameters_required: [accepted_evidence_types, redaction_policy, retention_policy], workflow_stage: [select, parameterize, render, validate], render: { required: { neutral: guides/other-policies/evidence-artifact-policy.md }, optional: {} }, activation: { cursor: manual, claude: manual, codex: manual }, dependencies: [universal.no-secrets, universal.evidence-before-final], conflicts: [], quality_gates: [no_secrets, no_private_paths, evidence_is_not_approval], status: ready, notes: "Evidence supports claims only." }
+  - { id: other.legal-content-policy, layer: other, artifact_type: policy, source_family: [legal-content], portability: reference_only, purpose: "Handle legal/content drafts safely.", applies_when: "Source includes legal or publication content.", parameters_required: [content_owner, approval_process, sanitizer_policy], workflow_stage: [select, parameterize, render, validate], render: { required: { neutral: guides/other-policies/legal-content-policy.md }, optional: {} }, activation: { cursor: manual, claude: manual, codex: manual }, dependencies: [universal.no-secrets], conflicts: [], quality_gates: [no_secrets, skipped_entries_explained], status: ready, notes: "No legal advice or raw drafts." }
+  - { id: other.archived-plan-policy, layer: other, artifact_type: policy, source_family: [archives], portability: reference_only, purpose: "Classify archived plans and bundles.", applies_when: "Source includes old plans, zips, or copied sessions.", parameters_required: [archive_paths, active_docs, sanitizer_policy], workflow_stage: [select, parameterize, render, validate], render: { required: { neutral: guides/other-policies/archived-plan-policy.md }, optional: {} }, activation: { cursor: manual, claude: manual, codex: manual }, dependencies: [universal.document-hierarchy], conflicts: [], quality_gates: [raw_generated_material_not_published, skipped_entries_explained], status: ready, notes: "Archives are historical unless reviewed." }
+  - { id: other.source-material-classification, layer: other, artifact_type: policy, source_family: [source-coverage], portability: reference_only, purpose: "Classify source families before adaptation.", applies_when: "Adding or adapting source-derived material.", parameters_required: [source_family, source_project, sanitizer_notes, license_status], workflow_stage: [select, parameterize, render, validate], render: { required: { neutral: guides/other-policies/source-material-classification.md }, optional: {} }, activation: { cursor: manual, claude: manual, codex: manual }, dependencies: [universal.no-secrets], conflicts: [], quality_gates: [no_private_paths, no_secrets, skipped_entries_explained], status: ready, notes: "Feeds SOURCE_COVERAGE and map entries." }

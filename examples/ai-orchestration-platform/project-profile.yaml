@@ -1,0 +1,29 @@
+project:
+  name: ai-orchestration-platform
+  description: Sanitized adaptive workflow platform example.
+  rule_files: ["AGENTS.md", "docs/ARCHITECTURE.md"]
+
+architecture:
+  type: ai-orchestration
+  selected_templates: ["trainable-architecture", "logical-unit-flow-machine", "smart-skills-orchestration"]
+
+stack:
+  languages: ["csharp", "typescript"]
+  frameworks: [".NET", "workflow-ui"]
+  cloud: ["aws"]
+  ci_system: "target-project-ci"
+
+commands:
+  safe: ["dotnet test <solution>", "npm test"]
+  approval_required: ["deploy <environment>"]
+  forbidden: ["destroy <environment>", "publish-private-models"]
+
+evidence:
+  accepted_types: ["test-output", "runtime-smoke-test", "sanitized-screenshot", "review-record"]
+  redaction_required: true
+
+adapters:
+  cursor: true
+  claude: true
+  codex: true
+

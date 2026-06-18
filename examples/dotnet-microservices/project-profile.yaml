@@ -1,0 +1,29 @@
+project:
+  name: dotnet-microservices
+  description: Sanitized .NET service example.
+  rule_files: ["AGENTS.md", "README.md"]
+
+architecture:
+  type: microservices
+  selected_templates: ["enterprise-completion-matrix", "session-gated-delivery"]
+
+stack:
+  languages: ["csharp"]
+  frameworks: [".NET"]
+  cloud: []
+  ci_system: "target-project-ci"
+
+commands:
+  safe: ["dotnet test <solution>"]
+  approval_required: ["dotnet publish <project>"]
+  forbidden: ["dotnet nuget push"]
+
+evidence:
+  accepted_types: ["test-output", "review-record", "smoke-test"]
+  redaction_required: true
+
+adapters:
+  cursor: false
+  claude: false
+  codex: true
+

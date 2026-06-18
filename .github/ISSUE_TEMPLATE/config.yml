@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Private security report
+    url: https://github.com/lubochka/xiigen-general-skills/security/advisories/new
+    about: Report vulnerabilities privately. Do not disclose exploit details, secrets, private prompts, local paths, raw logs, or project data in public issues.

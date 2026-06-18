@@ -1,0 +1,29 @@
+project:
+  name: "<target-project-name>"
+  description: "<short-description>"
+  rule_files: ["AGENTS.md", "README.md"]
+
+architecture:
+  type: "<web-service|microservices|workflow-engine|ai-orchestration|other>"
+  selected_templates: []
+
+stack:
+  languages: []
+  frameworks: []
+  cloud: []
+  ci_system: ""
+
+commands:
+  safe: []
+  approval_required: []
+  forbidden: []
+
+evidence:
+  accepted_types: []
+  redaction_required: true
+
+adapters:
+  cursor: false
+  claude: false
+  codex: true
+

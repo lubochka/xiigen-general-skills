@@ -1,0 +1,29 @@
+# Code Request Safety
+
+## Purpose
+Check risk before code actions.
+
+## When to Use
+Use before running commands, editing files, deleting files, moving data, or changing configuration.
+
+## Inputs
+User request, filesystem scope, command risk, approval policy, project safety rules.
+
+## Steps
+1. Identify the intended operation.
+2. Identify destructive or broad effects.
+3. Verify the allowed scope.
+4. Require a gate for unsafe work.
+
+## Gates
+Dangerous or unclear operations are blocked or explicitly approved.
+
+## Evidence
+Chosen command/edit scope and safety rationale.
+
+## Anti-Patterns
+Running destructive commands from guessed paths.
+
+## Related
+`code-execution`, `no-secrets`
+

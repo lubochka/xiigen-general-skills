@@ -1,0 +1,29 @@
+# Code Examination
+
+## Purpose
+Understand local code before changing it.
+
+## When to Use
+Use before implementation, refactoring, test fixes, or architecture changes.
+
+## Inputs
+Entry points, neighboring files, tests, interfaces, naming conventions, ownership boundaries.
+
+## Steps
+1. Locate the relevant code path.
+2. Read nearby patterns and tests.
+3. Identify contracts and boundaries.
+4. Make the smallest compatible change.
+
+## Gates
+The change matches local style and contracts.
+
+## Evidence
+Relevant files read and patterns followed.
+
+## Anti-Patterns
+Inventing a new abstraction without reading the codebase.
+
+## Related
+`project-rules-first`, `generated-code-review`
+

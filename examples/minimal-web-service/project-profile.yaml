@@ -1,0 +1,29 @@
+project:
+  name: minimal-web-service
+  description: Small HTTP API with no cloud deployment.
+  rule_files: ["README.md"]
+
+architecture:
+  type: web-service
+  selected_templates: []
+
+stack:
+  languages: ["typescript"]
+  frameworks: ["express"]
+  cloud: []
+  ci_system: "github-actions"
+
+commands:
+  safe: ["npm test", "npm run lint"]
+  approval_required: []
+  forbidden: ["npm publish"]
+
+evidence:
+  accepted_types: ["test-output", "lint-output"]
+  redaction_required: true
+
+adapters:
+  cursor: true
+  claude: false
+  codex: true
+
