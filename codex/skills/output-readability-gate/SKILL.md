@@ -1,0 +1,33 @@
+---
+name: output-readability-gate
+description: "Keep outputs readable for humans. Use before delivering plans, reports, READMEs, reviews, and adaptation output."
+---
+
+# Output Readability Gate
+
+## Purpose
+Keep outputs readable for humans.
+
+## When to Use
+Use before delivering plans, reports, READMEs, reviews, and adaptation output.
+
+## Inputs
+Draft output, target audience, required details, verification status.
+
+## Steps
+1. Remove irrelevant internal noise.
+2. Group related information.
+3. Keep action items visible.
+4. Preserve important evidence without overwhelming the reader.
+
+## Gates
+The output is concise, clear, and actionable.
+
+## Evidence
+Readable final artifact or review pass.
+
+## Anti-Patterns
+Huge unstructured dumps, duplicated sections, and unexplained jargon.
+
+## Related
+`session-output-contract`, `documentation-sync`

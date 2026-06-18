@@ -1,0 +1,33 @@
+---
+name: goal-delivery-completeness
+description: "Check that delivered work matches the user's goal. Use before final response, release, or handoff."
+---
+
+# Goal Delivery Completeness
+
+## Purpose
+Check that delivered work matches the user's goal.
+
+## When to Use
+Use before final response, release, or handoff.
+
+## Inputs
+Original request, plan, acceptance criteria, changed files, skipped items.
+
+## Steps
+1. Compare outputs to every requirement.
+2. Identify missing, skipped, or blocked items.
+3. Verify required checks were run.
+4. Report residual risk.
+
+## Gates
+All required work is complete or explicitly blocked.
+
+## Evidence
+Traceability table, review result, or final status summary.
+
+## Anti-Patterns
+Closing a task because some progress was made.
+
+## Related
+`session-output-contract`, `evidence-before-final`

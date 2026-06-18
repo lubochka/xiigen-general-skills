@@ -1,0 +1,33 @@
+---
+name: authority-chain
+description: "Resolve which instructions win when rules conflict. Use at the start of every task and whenever instructions disagree."
+---
+
+# Authority Chain
+
+## Purpose
+Resolve which instructions win when rules conflict.
+
+## When to Use
+Use at the start of every task and whenever instructions disagree.
+
+## Inputs
+User request, repository rules, project docs, local skills, and tool constraints.
+
+## Steps
+1. Identify all applicable instruction sources.
+2. Order them by authority and recency.
+3. Name conflicts before acting.
+4. Follow the highest-authority applicable rule.
+
+## Gates
+No unresolved instruction conflict remains before execution.
+
+## Evidence
+The final work reflects the selected rule order.
+
+## Anti-Patterns
+Following agent habit over project rules; copying another project's rule file wholesale.
+
+## Related
+`project-rules-first`, `document-hierarchy`

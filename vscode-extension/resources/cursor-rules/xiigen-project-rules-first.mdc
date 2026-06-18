@@ -1,0 +1,34 @@
+---
+description: Ensure project-specific rules are read before meaningful action. Use at task startup, before editing files, running commands, or adapting skills.
+globs: ["**/*"]
+alwaysApply: true
+---
+
+# Project Rules First
+
+## Purpose
+Ensure project-specific rules are read before meaningful action.
+
+## When to Use
+Use at task startup, before editing files, running commands, or adapting skills.
+
+## Inputs
+Project rule files such as `AGENTS.md`, `CLAUDE.md`, README, docs index, and local skill indexes.
+
+## Steps
+1. Locate project entry rules.
+2. Extract mandatory constraints.
+3. Apply only relevant rules to the current task.
+4. Record blockers when rules cannot be found.
+
+## Gates
+Project rules are either applied or explicitly marked missing.
+
+## Evidence
+Task outputs follow repository naming, safety, testing, and review constraints.
+
+## Anti-Patterns
+Starting from memory; treating another repository's `AGENTS.md` as universal.
+
+## Related
+`authority-chain`, `stale-baseline-guard`

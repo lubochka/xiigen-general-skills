@@ -1,85 +1,134 @@
-# XIIGen General Skills
+# XIIGen AI Agent Skills - reusable Claude, Codex, Cursor and AI coding agent skills
 
-XIIGen General Skills is an open-source collection of reusable agent skills,
-architecture templates, adaptation guides, and review checklists for configuring
-AI coding assistants such as Claude, Cursor, and Codex.
+Open-source AI agent skills for safer Claude, Codex, Cursor and AI coding
+workflows. XIIGen AI Agent Skills gives coding agents reusable planning,
+review, execution-gate, testing, documentation, and no-false-completion
+workflows that can be adapted to real projects.
 
-Licensed under the Apache License 2.0.
+[![License: Apache-2.0](https://img.shields.io/badge/License-Apache--2.0-blue.svg)](LICENSE)
+[![Skills](https://img.shields.io/badge/AI%20agent%20skills-Claude%20%7C%20Codex%20%7C%20Cursor-green.svg)](docs/compatibility.md)
+[![Safety](https://img.shields.io/badge/safety-no%20secrets%20%7C%20target%20commands-orange.svg)](docs/safety.md)
 
-This repository is not a copy of one project's `AGENTS.md`, `CLAUDE.md`, internal contracts, generated evidence, or stack commands. It is a reusable kit for creating project-specific rules and skills for Cursor, Claude, and Codex.
+## What This Is
 
-## What This Contains
+XIIGen AI Agent Skills is a reusable skill pack for AI coding assistants:
 
-- `skills/universal/`: reusable skills that are not tied to a specific stack or architecture.
-- `guides/architecture/`: architecture templates that must be adapted to a target project.
-- `guides/stack-skill-factories/`: guides for creating stack-specific skills from the target project's real commands and constraints.
-- `guides/other-policies/`: policies for evidence, generated docs, archived plans, legal/content drafts, and source material.
-- `adaptation/adaptation-map.yaml`: the canonical map for adapting skills and guides.
-- `adaptation/ADAPTATION-RUNBOOK.md`: the human-readable workflow to run with Cursor, Claude, or Codex.
-- `adapters/`: thin instructions for each agent surface.
-- `examples/`: sanitized example adaptation profiles and reports.
-- `docs/`: taxonomy, source boundary, release gates, review checklist, and versioning.
+- **Agent Skills-style folders** in `agent-skills/`.
+- **Claude-compatible skills** in `claude/skills/`.
+- **Codex-compatible skills** in `codex/skills/`.
+- **Cursor rules** in `cursor/rules/*.mdc`.
+- **Canonical universal skills** in `skills/universal/`.
+- **Architecture templates** in `guides/architecture/`.
+- **Stack-skill factory guides** in `guides/stack-skill-factories/`.
+- **Adaptation map and runbook** for generating target-project rules.
+- **npm and VS Code/Open VSX scaffolds** for future distribution.
 
-## Decision Path
+The ready-to-use `SKILL.md` files are universal-only. Architecture-dependent
+and stack-dependent material stays as templates or factory guidance that must be
+adapted from the target project.
 
-- Need only general agent discipline: start with `skills/universal/` and `index/SKILLS_INDEX.md`.
-- Need architecture guidance: start with `guides/architecture/` and `adaptation/project-profile.template.yaml`.
-- Need .NET, AWS, Docker, UI, runtime, or command rules: start with `guides/stack-skill-factories/`.
-- Need to adapt the full kit into another project: run `adaptation/ADAPTATION-RUNBOOK.md` with `adaptation/adaptation-map.yaml`.
-- Need the next source-derived expansion plan: read `docs/missing-universal-and-adaptation-gap-plan.md`.
-- Need the safe per-family source ledger for that plan: read `index/SOURCE_SKILL_FAMILY_LEDGER.md`.
+## Searchable Use Cases
+
+- Claude Code skills for planning, review, testing and safer completion.
+- Codex skills for project-rule loading, execution gates and evidence checks.
+- Cursor rules for AI coding workflows and no-false-completion behavior.
+- Agent Skills-compatible folders for cross-agent reuse.
+- AI coding agent review skills, debugging skills and documentation sync skills.
+- MCP-compatible guidance skills without pretending to be an MCP server.
+
+## Quick Install From A Clone
+
+```bash
+node cli/xiigen-agent-skills.js init
+node cli/xiigen-agent-skills.js add cursor-rules
+node cli/xiigen-agent-skills.js add claude-skills
+node cli/xiigen-agent-skills.js add codex-skills
+```
+
+After npm publication, the same flow is intended to work as:
+
+```bash
+npx @xiigen/agent-skills init
+npx @xiigen/agent-skills add planning
+npx @xiigen/agent-skills add cursor-rules
+```
+
+## Install Manually
+
+| Target | Copy from | Copy to |
+|---|---|---|
+| Agent Skills-style tools | `agent-skills/` | target project `agent-skills/` |
+| Claude | `claude/skills/` | target project `.claude/skills/` |
+| Codex | `codex/skills/` | target project `.agents/skills/` |
+| Cursor | `cursor/rules/*.mdc` | target project `.cursor/rules/` |
+
+Review copied files before committing them to a target project.
+
+## Adapt The Full Kit
+
+1. Copy `adaptation/project-profile.template.yaml` into the target project as
+   `project-profile.yaml`.
+2. Fill stack, architecture, commands, CI, project rules, forbidden actions and
+   evidence expectations.
+3. Read `adaptation/ADAPTATION-RUNBOOK.md`.
+4. Run the render script or ask Claude, Codex or Cursor to follow the runbook.
+5. Review `ADAPTATION_REPORT.md`, selected mappings, blockers and smoke tests.
+
+The render script produces neutral adapted artifacts first. Tool-specific
+Claude, Codex and Cursor files are created by following the selected adapter
+instructions after review.
+
+## Repository Map
+
+- `skills/universal/`: canonical universal skill source.
+- `agent-skills/`: Agent Skills-style distribution copy.
+- `claude/`: Claude install instructions and skill copy.
+- `codex/`: Codex install instructions and skill copy.
+- `cursor/`: Cursor install instructions and `.mdc` rules pack.
+- `guides/architecture/`: architecture templates for target-project adaptation.
+- `guides/stack-skill-factories/`: stack-specific skill factory guides.
+- `docs/compatibility.md`: Claude, Codex, Cursor and Agent Skills compatibility.
+- `docs/skill-authoring-guide.md`: how to add or adapt skills safely.
+- `docs/safety.md`: safety boundary for public and target-project use.
+- `docs/mcp-compatible-guidance.md`: MCP-compatible guidance without server claims.
+- `examples/before-after/`: prompt-only vs skill-based workflow examples.
+- `launch/`: Show HN, Reddit, Dev.to/Hashnode and awesome-list drafts.
+
+## Key Skills
+
+- `authority-chain`: resolve conflicting instructions.
+- `project-rules-first`: load target project rules before acting.
+- `plan-before-execution`: plan before risky or multi-file work.
+- `evidence-before-final`: require proof before completion claims.
+- `executor-cannot-self-finish`: separate execution from approval.
+- `no-secrets`: keep secrets, private prompts and raw evidence out.
+- `code-execution`: run commands intentionally and safely.
+- `test-integrity`: keep tests meaningful.
+- `generated-code-review`: review generated code before trusting it.
+- `goal-delivery-completeness`: verify delivered work against the goal.
 
 ## Boundary Rule
 
-Ready-to-use `SKILL.md` files in this repository are universal-only. Architecture-dependent material belongs in `guides/architecture/`; stack-dependent material belongs in `guides/stack-skill-factories/` and must be adapted from the target project's own commands, CI, and rules.
+Universal skills must not include project-specific stack commands, private
+paths, raw logs, internal prompts, copied worktrees, generated bundles, customer
+data, model artifacts or source-specific architecture contracts.
 
-## Quick Start
+Architecture and stack items are guidance for adaptation. Their commands and
+constraints must come from the target project profile, CI, docs and maintainers.
 
-1. Copy `adaptation/project-profile.template.yaml` into the target project as `project-profile.yaml`.
-2. Fill stack, architecture, commands, CI, project rules, forbidden actions, and evidence expectations.
-3. Open `adaptation/ADAPTATION-RUNBOOK.md`.
-4. Give the runbook and `adaptation/adaptation-map.yaml` to Cursor, Claude, or Codex.
-5. Review the generated `ADAPTATION_REPORT.md` and run the smoke tests.
-
-Expected output from the render script: neutral adapted artifacts, selected mappings,
-an adaptation report, skipped entries, blockers, and smoke-test instructions.
-Project-specific Cursor, Claude, or Codex files are then created by following
-the selected adapter instructions.
-
-## Tool Outputs
-
-- Cursor: `.cursor/rules/*.mdc`, plus optional `AGENTS.md`.
-- Claude: `CLAUDE.md` and `.claude/skills/<skill-name>/SKILL.md`.
-- Codex: `AGENTS.md` and `.agents/skills/<skill-name>/SKILL.md`.
-
-All tool outputs must reference the same `adaptation-map.yaml` entry id and canonical version. The delivery format can differ; the meaning must not drift.
-
-Tool outputs may include project-specific skills created during adaptation. Those generated skills belong to the target project; they are not ready-made universal skills shipped by this repository.
-
-## Common Failures
-
-- Placeholders were not resolved before rendering.
-- Build/test/deploy commands were copied from a source project instead of the target project.
-- A stack-specific command leaked into a universal skill.
-- Architecture templates still contain mandatory XIIGen, tenant, or trainable-unit names instead of placeholders.
-- Generated evidence, private prompts, copied worktrees, or local absolute paths were treated as reusable skills.
-
-## Safety and Responsibility
+## Safety And Responsibility
 
 These skills and templates are developer-assistance materials. They do not
-guarantee correct AI outputs, secure code, complete plans, or production-ready
-results. Users remain responsible for reviewing, testing, validating, and
-approving all outputs before use.
-
-## Not Legal, Security, Medical, Financial, or Professional Advice
+guarantee correct AI outputs, secure code, complete plans or production-ready
+results. Users remain responsible for review, testing, validation and approval.
 
 This repository provides general software-development guidance only. It is not
-legal, financial, medical, safety, security certification, compliance, or
+legal, financial, medical, safety, security certification, compliance or
 professional advice.
 
 ## Release Readiness
 
-This repository uses Apache-2.0, but public release readiness still depends on
-`docs/release-gates.md`: sanitizer review, provenance review, secret/path/archive
-scans, examples review, git history/export review, security contact setup, and
-legal review.
+This repository uses Apache-2.0. Public release readiness is tracked in
+`docs/release-gates.md` and includes sanitizer review, provenance review,
+secret/path/archive scans, examples review, git history/export review, security
+contact setup and legal review.

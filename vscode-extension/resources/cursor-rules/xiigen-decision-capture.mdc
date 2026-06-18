@@ -1,0 +1,34 @@
+---
+description: Record important decisions and rationale. Use when selecting architecture, stack guide, adapter output, or release policy.
+globs: ["**/*"]
+alwaysApply: false
+---
+
+# Decision Capture
+
+## Purpose
+Record important decisions and rationale.
+
+## When to Use
+Use when selecting architecture, stack guide, adapter output, or release policy.
+
+## Inputs
+Decision, context, options, tradeoffs, owner, date.
+
+## Steps
+1. State the decision.
+2. Record considered options.
+3. Explain the tradeoff.
+4. Link affected files or mapping entries.
+
+## Gates
+The decision can be understood later without chat history.
+
+## Evidence
+Decision note, ADR, mapping note, or review record.
+
+## Anti-Patterns
+Losing rationale after discussion.
+
+## Related
+`assumption-registry`, `document-hierarchy`

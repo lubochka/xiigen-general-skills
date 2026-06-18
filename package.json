@@ -1,0 +1,51 @@
+{
+  "name": "@xiigen/agent-skills",
+  "version": "0.1.0",
+  "description": "Reusable AI agent skills for safer Claude, Codex and Cursor coding workflows.",
+  "license": "Apache-2.0",
+  "type": "commonjs",
+  "bin": {
+    "xiigen-agent-skills": "cli/xiigen-agent-skills.js"
+  },
+  "files": [
+    "agent-skills/",
+    "claude/",
+    "codex/",
+    "cursor/",
+    "adaptation/",
+    "docs/",
+    "guides/",
+    "index/",
+    "templates/",
+    "cli/",
+    "README.md",
+    "LICENSE",
+    "NOTICE",
+    "SECURITY.md"
+  ],
+  "keywords": [
+    "ai-agent",
+    "agent-skills",
+    "claude-skills",
+    "codex",
+    "cursor-rules",
+    "ai-coding",
+    "coding-agent",
+    "prompt-engineering"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "check": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/release-hygiene-scan.ps1",
+    "pack:dry-run": "npm pack --dry-run"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lubochka/xiigen-general-skills.git"
+  },
+  "bugs": {
+    "url": "https://github.com/lubochka/xiigen-general-skills/issues"
+  },
+  "homepage": "https://github.com/lubochka/xiigen-general-skills#readme"
+}

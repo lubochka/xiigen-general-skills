@@ -1,0 +1,44 @@
+{
+  "name": "xiigen-smart-skills-pack",
+  "displayName": "XIIGen Smart Skills Pack",
+  "description": "Install reusable AI agent skills and Cursor rules for safer coding workflows.",
+  "version": "0.1.0",
+  "publisher": "xiigen",
+  "license": "Apache-2.0",
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "ai-agent",
+    "agent-skills",
+    "cursor-rules",
+    "claude",
+    "codex",
+    "prompt-engineering"
+  ],
+  "activationEvents": [
+    "onCommand:xiigen.addPlanningSkills",
+    "onCommand:xiigen.addCursorRules",
+    "onCommand:xiigen.openReadme"
+  ],
+  "main": "./extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "xiigen.addPlanningSkills",
+        "title": "XIIGen: Add Planning Skills"
+      },
+      {
+        "command": "xiigen.addCursorRules",
+        "title": "XIIGen: Add Cursor Rules"
+      },
+      {
+        "command": "xiigen.openReadme",
+        "title": "XIIGen: Open Skill Pack README"
+      }
+    ]
+  }
+}

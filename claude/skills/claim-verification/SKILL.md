@@ -1,0 +1,33 @@
+---
+name: claim-verification
+description: "Verify claims before presenting them as facts. Use in final answers, reports, reviews, and architecture decisions."
+---
+
+# Claim Verification
+
+## Purpose
+Verify claims before presenting them as facts.
+
+## When to Use
+Use in final answers, reports, reviews, and architecture decisions.
+
+## Inputs
+Source files, command outputs, docs, test results, assumptions.
+
+## Steps
+1. Split statements into facts and assumptions.
+2. Verify facts against source material.
+3. Mark assumptions clearly.
+4. Remove unsupported certainty.
+
+## Gates
+Important claims are verified or labeled as inference.
+
+## Evidence
+References to files, checks, or explicit assumptions.
+
+## Anti-Patterns
+Confident summaries based on memory.
+
+## Related
+`evidence-before-final`, `output-readability-gate`
